@@ -20,10 +20,11 @@ export default function Home() {
     const handleSubmit = (e) => {
         e.preventDefault();
         // フォームのデータを処理する
-        console.log('テキスト:', text);
         console.log('画像ファイル:', image);
+        console.log('テキスト:', text);
 
-        let
+
+        //画像はimage、テキストはtext変数　これらをDBに送信する 
     };
 
     return (
