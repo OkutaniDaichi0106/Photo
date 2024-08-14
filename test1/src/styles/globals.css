@@ -1,0 +1,124 @@
+/* タイトルロゴ用 */
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
+
+h1 {
+  font-family: 'Sacramento', cursive;
+  text-align: center;
+}
+
+/* 基本設定 */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #e0f2e9;
+  /* 柔らかい薄い緑色 */
+  color: #2e4d38;
+  /* 深い森の緑色 */
+  margin: 0;
+  padding: 0;
+}
+
+/* ヘッダー */
+header {
+  background-color: #a8d5ba;
+  /* 少し濃い目の緑色 */
+  color: #ffffff;
+  padding: 20px;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+/* ナビゲーションバー */
+nav {
+  background-color: #8cbfa8;
+  /* 中間の緑色 */
+  overflow: hidden;
+}
+
+nav a {
+  float: left;
+  display: block;
+  color: #ffffff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+nav a:hover {
+  background-color: #6fa287;
+  /* 少し暗い緑色 */
+}
+
+/* メインコンテンツ */
+main {
+  padding: 20px;
+  background-color: #f5faf7;
+  /* とても薄い緑色 */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #2e4d38;
+  /* 深い森の緑色 */
+}
+
+p {
+  line-height: 1.6;
+}
+
+/* ボタン */
+button {
+  background-color: #8cbfa8;
+  /* 中間の緑色 */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1em;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #6fa287;
+  /* 少し暗い緑色 */
+}
+
+/* フッター */
+footer {
+  background-color: #a8d5ba;
+  /* 少し濃い目の緑色 */
+  color: #ffffff;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/* ヘッダー */
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  /* ヘッダーの高さ */
+  background-color: white;
+  z-index: 1000;
+}
+
+.flexbox {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
