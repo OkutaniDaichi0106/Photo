@@ -1,0 +1,30 @@
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #D2B48C;
+    /* 薄茶色 */
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    /* 丸角 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* 影 */
+    transition: background-color 0.3s ease;
+    border: none;
+    /* ボタンのデフォルトボーダーを削除 */
+    cursor: pointer;
+    /* ポインターを指示 */
+    margin-bottom: 20px;
+    /* 下に20pxの間隔を追加 */
+
+}
+
+.btn:hover {
+    background-color: #C19A6B;
+    /* ホバー時の色 */
+}
+
+.btn i {
+    margin-right: 8px;
+    /* アイコンとテキストの間隔 */
+}
