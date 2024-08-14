@@ -10,7 +10,11 @@ export default function Home() {
     }
 
     const navigateToPage2 = () => {
-        router.push('/page2');
+        router.push('/vote');
+    }
+
+    const navigateToPage3 = () => {
+        router.push('/result');
     }
 
 
@@ -19,6 +23,7 @@ export default function Home() {
             <h1>ホームページ</h1>
             <button onClick={navigateToPage1}>Page 1へ移動</button>
             <button onClick={navigateToPage2}>Page 2へ移動</button>
+            <button onClick={navigateToPage3}>result</button>
         </div>
     );
 }
