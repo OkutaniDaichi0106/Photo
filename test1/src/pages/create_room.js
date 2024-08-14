@@ -22,8 +22,6 @@ export default function Home() {
         // フォームのデータを処理する
         console.log('テキスト:', text);
         console.log('画像ファイル:', image);
-
-        let
     };
 
     return (
