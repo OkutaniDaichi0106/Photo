@@ -22,4 +22,9 @@ async function getRooms() {
 	return data
 }
 
+//
+async function getUserData() {
+	
+}
+
 supabaseClient.from(USERS_TABLE).select("").eq()
