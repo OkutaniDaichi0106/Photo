@@ -59,6 +59,7 @@ const user = (await client.auth.getUser())
 	})
 }
 
+// Set a session with access_token and refresh_token
 async function setSession(access_token, refresh_token) {
 	const { data, err } = await client.auth.setSession({
 		access_token: access_token,
@@ -79,6 +80,6 @@ async function getUUIDFromTokens(access_token, refresh_token) {
 
 /////////////////////////
 
-
+// On click button ""
 await signInWithDiscord()
 
