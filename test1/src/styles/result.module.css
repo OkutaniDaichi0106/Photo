@@ -13,7 +13,8 @@
 .imagecontainer {
     position: relative;
     width: 100%;
-    max-width: 500px; /* 画像の最大幅を設定 */
+    max-width: 500px;
+    /* 画像の最大幅を設定 */
     margin: 0 auto;
 }
 
@@ -66,4 +67,87 @@
 
 .imagecontainer {
     cursor: pointer;
+}
+
+/* result.module.css */
+.galleryContainer {
+    /* galleryContainerのスタイル */
+}
+
+.result {
+    /* resultのスタイル */
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.imagecontainer {
+    /* すべてのimagecontainerに適用される基本スタイル */
+    position: relative;
+    margin: 10px;
+}
+
+.imageWrapper {
+    /* 画像ラッパーの基本スタイル */
+    border: 2px solid #ccc;
+    /* デフォルトの枠線 */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.rankLabel {
+    /* ランクラベルのスタイル */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* 1位から3位までの特別な枠スタイル */
+.rank-1 .imageWrapper {
+    border: 4px solid gold;
+    box-shadow: 0 0 10px gold;
+}
+
+.rank-2 .imageWrapper {
+    border: 4px solid silver;
+    box-shadow: 0 0 10px silver;
+}
+
+.rank-3 .imageWrapper {
+    border: 4px solid bronze;
+    box-shadow: 0 0 10px bronze;
+}
+
+.dialogOverlay {
+    /* dialogOverlayのスタイル */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialogContent {
+    /* dialogContentのスタイル */
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.closeButton {
+    /* closeButtonのスタイル */
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: #0070f3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.closeButton:hover {
+    background: #005bb5;
 }
