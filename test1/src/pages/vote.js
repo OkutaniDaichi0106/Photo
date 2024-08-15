@@ -1,16 +1,27 @@
+import { createClient } from "@supabase/supabase-js";
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 
 export default function SwipeDemo() {
+  // SupaBase
+  // Constant to identifies the DB server
+  const PROJECT_URL = "https://khbecgwvsbdguigjapru.supabase.co";
+  const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoYmVjZ3d2c2JkZ3VpZ2phcHJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1MjY4MzYsImV4cCI6MjAzOTEwMjgzNn0.X8PCdQimHNp0hZoGVorEC1-W5HiYxXK2QtvWi99Jycw";
+  // All tables
+  const ROOMS_TABLE = "rooms";
+  const POSTS_TABLE = "posts";
+  const STARS_TABLE = "stars";
+  // Create client querys to the DB server
+  let client = createClient(PROJECT_URL, API_KEY);
+
   const [currentX, setCurrentX] = useState(0);
   const [currentY, setCurrentY] = useState(0);
-  const [value, setValue] = useState(null);
-  const [checkPhoto, setCheckPhoto] = useState(true);
-  const [photoURL, setPhotoURL] = useState('/IMGP3543.jpg');
   const [showImage, setShowImage] = useState(true);
-  const [history, setHistory] = useState([]);// 巻き戻し機能
+  const [history, setHistory] = useState([]);
   const [predictedValue, setPredictedValue] = useState(null);
   const [isSwipeComplete, setIsSwipeComplete] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
+  const currentImageIndex = useRef(0);
   const swipeAreaRef = useRef(null);
   const startXRef = useRef(0);
   const startYRef = useRef(0);
@@ -18,14 +29,38 @@ export default function SwipeDemo() {
   const currentXRef = useRef(0);
   const currentYRef = useRef(0);
 
+  const setEvaldict = useRef({}); // 評価値保存{photoid:value（評価値）}
+
+  const images = [ // 本来はDBから取得した写真
+    '/IMG_9986.jpg',
+    '/IMG_7187.jpg',
+    '/IMG_7203.jpg',
+    '/IMG_9950.jpg',
+    '/IMG_9964.jpg',
+    '/030_2048.jpg',
+    '/IMGP3543.jpg',
+    // 必要な数だけ画像パスを追加
+  ];
+  const photoid = []; // 本来はDBから取得した値たち
+  for (let i = 0; i < images.length; i++) {
+    photoid.push(i);
+  }
+
+
   const changePhoto = (newValue) => {
-    setShowImage(false);  // 画像を非表示にする
+    setShowImage(false);
     setTimeout(() => {
-      setCheckPhoto(prev => !prev);
-      setPhotoURL(prev => prev === '/IMGP3543.jpg' ? '/IMG_9986.jpg' : '/IMGP3543.jpg');
-      setShowImage(true);  // 画像を再表示する
-      setHistory(prev => [...prev, newValue]);// 巻き戻し機能
-    }, 300);  // 300ミリ秒後に画像を切り替えて表示
+      if (currentImageIndex.current < images.length - 1) {
+        currentImageIndex.current++;
+        console.log("currentImageIndex:" + currentImageIndex.current + "images.length:" + (images.length - 1));
+        setShowImage(true);
+        setHistory(prev => [...prev, newValue]);
+      } else {
+        console.log("changephoto");
+        currentImageIndex.current++;
+        setIsFinished(true);
+      }
+    }, 300);
   }
 
 
@@ -118,10 +153,11 @@ export default function SwipeDemo() {
         newValue = currentYRef.current < 0 ? 2 : null;
       }
 
-      setValue(newValue);
       console.log(newValue);
+      setEvaluation(newValue);
 
-      if (newValue !== null) {
+      console.log(isFinished);
+      if (!isFinished) {
         changePhoto(newValue);
       }
       setIsSwipeComplete(true);
@@ -143,53 +179,70 @@ export default function SwipeDemo() {
     }
   };
 
-
   const handleButtonClick = (buttonValue) => {
-    setValue(buttonValue);
-    changePhoto(buttonValue);
+    if (!isFinished) {
+      setEvaluation(buttonValue);
+      changePhoto(buttonValue);
+    }
   };
 
   const handleUndo = () => {
-    if (history.length > 0) {
-      const prevValue = history[history.length - 2];
-      setValue(prevValue);
+    if (history.length > 0 && currentImageIndex.current > 0) {
+      currentImageIndex.current--;
       setHistory(prev => prev.slice(0, -1));
-      changePhoto(prevValue);
+      setIsFinished(false);
+      setShowImage(true);
+      setEvaldict.current[photoid[currentImageIndex.current]] = 0;
     } else {
       alert("まだ戻すことができません");
     }
   };
 
+  const setEvaluation = (value) => {
+    setEvaldict.current[photoid[currentImageIndex.current]] = value;
+    console.log(JSON.stringify(setEvaldict.current));
+  }
+
+  const printStar = (value) => { }
+
   return (
     <div id="swipe-container" style={swipeContainerStyle}>
-      {predictedValue !== null && (
-        <div style={predictedValueStyle} >
-          {predictedValue}
-        </div>
-      )}
-      <div
-        ref={swipeAreaRef}
-        className="swipe-area"
-        style={{
-          ...swipeAreaStyle,
-          transform: `translate(${currentX}px, ${currentY}px)`,
-        }}
-      >
-        {showImage &&
-          <Image fill
+      {isFinished ? (
+        <div style={finishedStyle}>終了</div>
+      ) : (
+        <>
+          {predictedValue !== null && (
+            <div style={predictedValueStyle}>
+              {predictedValue}
+            </div>
+          )}
+          <div
+            ref={swipeAreaRef}
+            className="swipe-area"
             style={{
-              objectFit: 'contain',
-              pointerEvents: 'none',
-            }} src={photoURL}
-            alt="Swipe image" />
-        }
-      </div>
-      <div style={buttonContainerStyle}>
-        <button style={buttonStyle} onClick={handleUndo}>戻る</button>
-        <button style={buttonStyle} onClick={() => handleButtonClick(1)}>1</button>
-        <button style={buttonStyle} onClick={() => handleButtonClick(2)}>2</button>
-        <button style={buttonStyle} onClick={() => handleButtonClick(3)}>3</button>
-      </div>
+              ...swipeAreaStyle,
+              transform: `translate(${currentX}px, ${currentY}px)`,
+            }}
+          >
+            {showImage &&
+              <Image fill
+                style={{
+                  objectFit: 'contain',
+                  pointerEvents: 'none',
+                }}
+                src={images[currentImageIndex.current]}
+                alt={`Swipe image ${currentImageIndex.current + 1}`}
+              />
+            }
+          </div>
+          <div style={buttonContainerStyle}>
+            <button style={backButtonStyle} onClick={handleUndo}></button>
+            <button style={buttonStyle} onClick={() => handleButtonClick(1)}>1</button>
+            <button style={buttonStyle} onClick={() => handleButtonClick(2)}>2</button>
+            <button style={buttonStyle} onClick={() => handleButtonClick(3)}>3</button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -232,6 +285,17 @@ const buttonStyle = {
   cursor: 'pointer',
 };
 
+const backButtonStyle = {
+  margin: '0 10px',
+  padding: '10px 20px',
+  fontSize: '18px',
+  cursor: 'pointer',
+  backgroundImage: 'url("/back.jpeg")',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+};
+
 const predictedValueStyle = {
   position: 'absolute',
   top: 0,
@@ -247,5 +311,20 @@ const predictedValueStyle = {
   backgroundColor: 'rgba(255, 255, 255, 0.5)',
   zIndex: 10,
   pointerEvents: 'none',
-  opacity:'0.5',
+  opacity: '0.5',
+};
+
+const finishedStyle = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  fontSize: '50px',
+  fontWeight: 'bold',
+  color: 'black',
+  backgroundColor: 'white',
 };
