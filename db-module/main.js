@@ -25,6 +25,7 @@ async function SignInWithDiscord() {
 	const redirectURL = data.url
 	// Redirect to the URL with some parameters
 	console.log(redirectURL)
+
 	//window.location.href(redirectURL)
 
 	/**
@@ -41,18 +42,13 @@ async function SignOut() {
 	}
 }
 
-async function retrieveSession(){
-	const { data, err } = await client.auth.getSession()
-	if (err) {
-		console.error(err)
-	}
-	return data
-}
 
 async function RegisterRoom(roomName, roomDescription) {
 	// Get the client's User UID
-const user = await client.auth.getUser()
-	const { data, err } = client.from(ROOMS_TABLE).insert({
+
+	const data = await client.auth.getUser()
+	console.log(data)
+	const {data1, err} = client.from(ROOMS_TABLE).insert({
 
 	})
 }
@@ -111,8 +107,16 @@ async function GetPosts(room_id) {
 	}
 	console.log(data)
 }
-await GetPosts(0)
-await Evaluate(3, 3)
+
+async function SignUp() {
+	const { data, err } = await client.auth.signUp({
+		email:"daichi1616.kytuniv@gmail.com",
+		password:"rikugame3",
+	})
+}
+
+await SignUp()
+await RegisterRoom("aaa", "Hello!")
 /////////////////////////
 
 // SAMPLE
