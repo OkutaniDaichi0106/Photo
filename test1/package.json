@@ -1,5 +1,5 @@
 {
-  "name": "test1",
+  "name": "my-slideshow-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,12 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.5"
+    "@supabase/supabase-js": "^2.45.1",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-slick": "^0.30.2",
+    "react-toastify": "^10.0.5",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
-    "eslint": "^8",
-    "eslint-config-next": "14.2.5"
+    "eslint": "^9.9.0"
   }
 }
