@@ -14,12 +14,9 @@ const STARS_TABLE = "stars"
 let client = createClient(PROJECT_URL, API_KEY)
 
 // Sign in with Discord
-async function signInWithDiscord() {
+async function SignInWithDiscord() {
 	const { data, err } = await client.auth.signInWithOAuth({
 		provider: "discord",
-		options: {
-			redirectTo: "https://localhost:3000"
-		}
 	})
 	if (err) {
 		console.error(err)
@@ -27,7 +24,8 @@ async function signInWithDiscord() {
 
 	const redirectURL = data.url
 	// Redirect to the URL with some parameters
-	window.location.href(redirectURL)
+	console.log(redirectURL)
+	//window.location.href(redirectURL)
 
 	/**
 	 * At the redirect page, parse the paramters in the URL such as ... 
@@ -36,7 +34,7 @@ async function signInWithDiscord() {
 }
 
 // Sign out
-async function signOut() {
+async function SignOut() {
 	const { err } = await client.auth.signOut()
 	if (err) {
 		console.error(err)
@@ -51,9 +49,9 @@ async function retrieveSession(){
 	return data
 }
 
-async function registerRoom(roomName, roomDescription) {
+async function RegisterRoom(roomName, roomDescription) {
 	// Get the client's User UID
-const user = (await client.auth.getUser())
+const user = await client.auth.getUser()
 	const { data, err } = client.from(ROOMS_TABLE).insert({
 
 	})
@@ -72,15 +70,58 @@ async function setSession(access_token, refresh_token) {
 	return data
 }
 
-async function getUUIDFromTokens(access_token, refresh_token) {
-	const data = await setSession(access_token, refresh_token)
-	uuid = data.user.id
-	return uuid
+async function Evaluate(post_id, star) {
+	// Check if the number of the stars is valid
+	if (star < 0 || star > 3) {
+		console.error("invalid star")
+		return
+	}
+
+	// Register the data
+	const { data, err } = await client
+		.from(STARS_TABLE)
+		.insert({
+			"post_id": post_id,
+			"star": star,
+		}).select()
+
+	if (err) {
+		console.error(err)
+	}
+	console.log(data)
 }
 
+// 
+async function GetTotal(post_id) {
+	const { stars, err } = await client.from(STARS_TABLE).select("star").eq("post_id", post_id)
+	if (err) {
+		console.error(err)
+	}
+	let sum = 0
+	for (let i = 0; i < stars.length; i++) {
+		sum += stars[i]
+	}
+	return sum
+}
+
+async function GetPosts(room_id) {
+	const { data, err} = client.from(POSTS_TABLE).select("*").eq("room_id", room_id)
+	if (err) {
+		console.error(err)
+	}
+	console.log(data)
+}
+await GetPosts(0)
+await Evaluate(3, 3)
 /////////////////////////
 
-// Log in button
-await signInWithDiscord()
+// SAMPLE
 
-//
+/**
+ * Sign In
+ * 
+ * async function () {
+ *   await signInWithDiscord()
+ * }
+ * 
+ */
