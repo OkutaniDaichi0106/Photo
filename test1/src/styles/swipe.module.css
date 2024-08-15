@@ -1,0 +1,14 @@
+#swipe-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+.swipe-area {
+  width: 200px;
+  height: 200px;
+  background-color: red;
+  touch-action: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
