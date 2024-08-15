@@ -21,10 +21,13 @@ export default function Home() {
         e.preventDefault();
         // フォームのデータを処理する
         console.log('画像ファイル:', image);
+<<<<<<< HEAD
         console.log('テキスト:', text);
 
 
         //画像はimage、テキストはtext変数　これらをDBに送信する 
+=======
+>>>>>>> 5b9cf1f3d183979ddddab637913824b23b2fd952
     };
 
     return (

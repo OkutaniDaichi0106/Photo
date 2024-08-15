@@ -3,7 +3,7 @@
 
 h1 {
   font-family: 'Sacramento', cursive;
-  text-align: center;
+  <<<<<<< HEAD text-align: center;
 }
 
 /* 基本設定 */
@@ -15,6 +15,19 @@ body {
   /* 深い森の緑色 */
   margin: 0;
   padding: 0;
+  =======
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+  overflow: hidden;
+  >>>>>>>5b9cf1f3d183979ddddab637913824b23b2fd952
 }
 
 /* ヘッダー */
@@ -105,6 +118,7 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
+  <<<<<<< HEAD
 }
 
 /* ヘッダー */

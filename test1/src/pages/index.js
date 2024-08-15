@@ -25,6 +25,7 @@ export default function Home() {
 
     return (
         <div>
+<<<<<<< HEAD
             <Header />
             <h1>Snap Shot in Time</h1>
             <Slideshow />
