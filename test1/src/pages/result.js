@@ -57,13 +57,16 @@ const ImageGallery = () => {
                 <div className={styles.result}>
                     {images.map((src, index) => (
                         <div key={index} className={styles.imagecontainer} onClick={() => openDialog(src, index)}>
-                            <Image
-                                src={src}
-                                alt={`Image ${index + 1}`}
-                                layout="responsive"
-                                width={300}
-                                height={400}
-                                objectFit="cover" />
+                            <div class="rank rank-1">
+                                <Image
+                                    src={src}
+                                    alt={`Image ${index + 1}`}
+                                    className={`${index + 1}`}
+                                    layout="responsive"
+                                    width={300}
+                                    height={400}
+                                    objectFit="cover" />
+                            </div>
                             {index < 3 && (
                                 <div className={styles.rankLabel}>
                                     <Image

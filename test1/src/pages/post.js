@@ -59,35 +59,51 @@ export default function Home() {
     const closeDialog = () => {
         setDialogOpen(false);
     };
-
+    const customButtonStyle = {
+        backgroundColor: '#40a798',
+        color: 'white',
+        border: 'none',
+        padding: '2px 10px',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        fontSize: '16px',
+        textAlign: 'center',
+    };
 
     return (
         <div>
             <Header />
             <form onSubmit={handleSubmit}>
                 <div>
-                    <div>
-                        <label htmlFor="image">画像:</label>
+                    <div style={{ marginTop: '10px' }}
+                    >
+                        <label htmlFor="image" style={{ marginTop: '10px' }}
+                        >画像:</label>
                         <input
                             type="file"
                             id="image"
                             accept="image/*"
                             onChange={handleImageChange}
+                            style={{ display: 'none' }}
                         />
+                        <label htmlFor="image" style={customButtonStyle}>ファイルを選択
+                        </label>
                     </div>
                     {imagePreview && (
                         <div>
-                            <p>画像プレビュー:</p>
+                            <p>プレビュー:</p>
                             <img src={imagePreview} alt="Image Preview" style={{ maxWidth: '200px' }} />
                         </div>
                     )}
-                    <label htmlFor="text">テキスト:</label>
+                    <label htmlFor="text"
 
-                    <input
-                        type="text"
+                    >説明:</label>
+
+                    <textarea
                         id="text"
                         value={text}
                         onChange={handleTextChange}
+                        style={{ marginTop: '10px' }}
                     />
                 </div>
 
