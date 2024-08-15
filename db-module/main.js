@@ -80,6 +80,7 @@ async function getUUIDFromTokens(access_token, refresh_token) {
 
 /////////////////////////
 
-// On click button ""
+// Log in button
 await signInWithDiscord()
 
+//
