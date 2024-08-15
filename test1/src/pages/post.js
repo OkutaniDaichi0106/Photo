@@ -64,7 +64,6 @@ export default function Home() {
     return (
         <div>
             <Header />
-            <h1>Post</h1>
             <form onSubmit={handleSubmit}>
                 <div>
                     <div>
