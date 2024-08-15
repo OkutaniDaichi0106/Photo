@@ -1,7 +1,8 @@
 .btn {
+    width: 60%;
     display: inline-block;
     padding: 10px 20px;
-    background-color: #D2B48C;
+    background-color: #8B4513;
     /* 薄茶色 */
     color: white;
     text-decoration: none;
@@ -16,6 +17,7 @@
     /* ポインターを指示 */
     margin-bottom: 20px;
     /* 下に20pxの間隔を追加 */
+    vertical-align: bottom;
 
 }
 

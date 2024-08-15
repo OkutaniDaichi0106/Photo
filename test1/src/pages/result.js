@@ -17,9 +17,9 @@ let client = createClient(PROJECT_URL, API_KEY);
 const ImageGallery = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const images = [
-        '/IMG_9986.jpg',
-        '/IMG_7187.jpg',
-        '/IMG_7203.jpg',
+        '/images/image1.jpg',
+        '/images/image2.jpg',
+        '/images/image1.jpg',
         '/IMG_9950.jpg',
         '/IMG_9964.jpg',
         '/030_2048.jpg',

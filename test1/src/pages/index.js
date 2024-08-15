@@ -1,45 +1,46 @@
 'use client';
 import React from 'react';
-import Header from '../components/header';
+import Header from '../components/Header';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import Button1 from '../components/Button1';
 import Button2 from '../components/Button2';
+import Slideshow from '../components/Slideshow';
 
 export default function Home() {
+    const [inputValue, setInputValue] = useState('');
     const router = useRouter();
 
     const navigateToPage1 = () => {
-        router.push('/create_room');
+        router.push('/post');
     }
+    //id入力後ボタン押したときの処理
+    const handleTextChange = (event) => {
+        setInputValue(event.target.value);
+    };
 
     const navigateToPage2 = () => {
-<<<<<<< HEAD
-        router.push('/create_room');
-=======
-        router.push('/vote');
+        router.push('/create');
     }
-
-    const navigateToPage3 = () => {
-        router.push('/result');
->>>>>>> 5b9cf1f3d183979ddddab637913824b23b2fd952
-    }
-
 
     return (
         <div>
-<<<<<<< HEAD
             <Header />
-            <h1>snap shot in time</h1>
+            <h1>Snap Shot in Time</h1>
+            <Slideshow />
             <div class="flexbox">
+                <div class="flex-item" ><label htmlFor="text">ルームID<br></br></label>
+
+                    <input
+                        type="text"
+                        id="text"
+                        value={inputValue}
+                        onChange={handleTextChange}
+                        className={"label-text"} /></div>
                 <div class="flex-item"> <Button1 onClick={navigateToPage1} /></div>
                 <div class="flex-item"> <Button2 onClick={navigateToPage2} /></div>
             </div>
-=======
-            <h1>ホームページ</h1>
-            <button onClick={navigateToPage1}>Page 1へ移動</button>
-            <button onClick={navigateToPage2}>Page 2へ移動</button>
-            <button onClick={navigateToPage3}>result</button>
->>>>>>> 5b9cf1f3d183979ddddab637913824b23b2fd952
-        </div>
+
+        </div >
     );
 }
