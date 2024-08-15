@@ -19,12 +19,16 @@ body {
 
 /* ヘッダー */
 header {
-  background-color: #a8d5ba;
+  background-color: #a6b8e1;
   /* 少し濃い目の緑色 */
   color: #ffffff;
   padding: 20px;
   text-align: center;
   font-size: 1.5em;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* 影を追加 */
+  border-radius: 10px;
+  /* 角を丸くする */
 }
 
 /* ナビゲーションバー */
@@ -71,7 +75,8 @@ p {
 
 /* ボタン */
 button {
-  background-color: #8cbfa8;
+  text-align: center;
+  background-color: #8B4513;
   /* 中間の緑色 */
   border: none;
   color: white;
@@ -121,4 +126,15 @@ footer {
   display: flex;
   flex-direction: column;
   text-align: center;
+}
+
+.label-text {
+  width: 65%;
+  height: 30px;
+  margin-bottom: 3px;
+  /* 必要に応じて値を変更してください */
+}
+
+.slick-arrow {
+  display: none !important;
 }

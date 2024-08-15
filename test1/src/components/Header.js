@@ -1,18 +1,16 @@
 
-
-// components/Header.js
 import Image from 'next/image';
 
 const Header = () => {
     return (
-        <div style={{ backgroundColor: '#9de0ad', width: '100%', textAlign: 'center' }}>
+        <div style={{ backgroundColor: '#40a798', width: '100%', textAlign: 'center' }}>
             <div style={{ display: 'inline-block' }}>
                 <div style={{ width: '100%' }}>
                     <Image
-                        src="/logo.png"
+                        src="/logo_white.png"
                         alt="Description"
-                        width={200}
-                        height={100}
+                        width={160}
+                        height={50}
                     />
                 </div>
             </div>
