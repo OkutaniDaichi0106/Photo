@@ -1,20 +1,18 @@
-
 import { createClient } from "@supabase/supabase-js";
 
 // Constant to identifies the DB server
-const PROJECT_URL = "https://khbecgwvsbdguigjapru.supabase.co"
-const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoYmVjZ3d2c2JkZ3VpZ2phcHJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1MjY4MzYsImV4cCI6MjAzOTEwMjgzNn0.X8PCdQimHNp0hZoGVorEC1-W5HiYxXK2QtvWi99Jycw"
+export const PROJECT_URL = "https://khbecgwvsbdguigjapru.supabase.co"
+export const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoYmVjZ3d2c2JkZ3VpZ2phcHJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1MjY4MzYsImV4cCI6MjAzOTEwMjgzNn0.X8PCdQimHNp0hZoGVorEC1-W5HiYxXK2QtvWi99Jycw"
 
 // All tables
-const ROOMS_TABLE = "rooms"
-const POSTS_TABLE = "posts"
-const STARS_TABLE = "stars"
+export const ROOMS_TABLE = "rooms"
+export const POSTS_TABLE = "posts"
+export const STARS_TABLE = "stars"
 
 // Create client querys to the DB server
-let client = createClient(PROJECT_URL, API_KEY)
 
 // Sign in with Discord
-async function SignInWithDiscord() {
+export async function SignInWithDiscord() {
 	const { data, err } = await client.auth.signInWithOAuth({
 		provider: "discord",
 	})
@@ -115,23 +113,8 @@ async function SignUp() {
 	})
 }
 
-async function getRooms() {
-	// Get recent 100 rooms
-	let { data, err } = await client
-		.from(POSTS_TABLE)
-		.select("*")
-		//.eq("id", 0)
-		//.order("created_at", {ascending: false})
-		//.limit(100)
-	if (err) {
-		console.error(err);
-	}
-	console.log(data)
-	return data
-}
 
-await SignUp()
-await getRooms()
+
 /////////////////////////
 
 // SAMPLE
