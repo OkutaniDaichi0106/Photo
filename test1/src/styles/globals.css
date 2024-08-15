@@ -2,8 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
 
 h1 {
-  font-family: 'Sacramento', cursive;
-<<<<<<< HEAD
+  /* font-family: 'Sacramento', cursive; */
   text-align: center;
 }
 
@@ -16,29 +15,20 @@ body {
   /* 深い森の緑色 */
   margin: 0;
   padding: 0;
-=======
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f0f0f0;
-  overflow: hidden;
->>>>>>> 5b9cf1f3d183979ddddab637913824b23b2fd952
 }
 
 /* ヘッダー */
 header {
-  background-color: #a8d5ba;
+  background-color: #a6b8e1;
   /* 少し濃い目の緑色 */
   color: #ffffff;
   padding: 20px;
   text-align: center;
   font-size: 1.5em;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* 影を追加 */
+  border-radius: 10px;
+  /* 角を丸くする */
 }
 
 /* ナビゲーションバー */
@@ -85,7 +75,8 @@ p {
 
 /* ボタン */
 button {
-  background-color: #8cbfa8;
+  text-align: center;
+  background-color: #8B4513;
   /* 中間の緑色 */
   border: none;
   color: white;
@@ -106,7 +97,7 @@ button:hover {
 
 /* フッター */
 footer {
-  background-color: #a8d5ba;
+  background-color: #f5faf7;
   /* 少し濃い目の緑色 */
   color: #ffffff;
   text-align: center;
@@ -114,7 +105,6 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-<<<<<<< HEAD
 }
 
 /* ヘッダー */
@@ -136,6 +126,15 @@ footer {
   display: flex;
   flex-direction: column;
   text-align: center;
-=======
->>>>>>> 5b9cf1f3d183979ddddab637913824b23b2fd952
+}
+
+.label-text {
+  width: 65%;
+  height: 30px;
+  margin-bottom: 3px;
+  /* 必要に応じて値を変更してください */
+}
+
+.slick-arrow {
+  display: none !important;
 }

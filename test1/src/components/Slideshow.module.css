@@ -1,0 +1,30 @@
+/* Slideshow.module.css */
+.slide {
+    width: 80vw;
+    height: 45vw;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .slide {
+        width: 90vw;
+        /* スマホでは幅を90%に */
+        height: 50vw;
+        /* スマホでは高さを50%に */
+    }
+}
+
+.next {
+    display: none;
+
+}
+
+.prev {
+    display: none;
+}
+
+.slick-arrow {
+    display: none !important;
+}

@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { useState } from 'react';
 import Image from 'next/image';
 import styles from '../styles/result.module.css';
+import Header from '../components/Header';
 
 /* SupaBase */
 // Constant to identifies the DB server
@@ -17,9 +18,9 @@ let client = createClient(PROJECT_URL, API_KEY);
 const ImageGallery = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const images = [
-        '/IMG_9986.jpg',
-        '/IMG_7187.jpg',
-        '/IMG_7203.jpg',
+        '/images/image1.jpg',
+        '/images/image2.jpg',
+        '/images/image1.jpg',
         '/IMG_9950.jpg',
         '/IMG_9964.jpg',
         '/030_2048.jpg',
@@ -50,50 +51,49 @@ const ImageGallery = () => {
     };
 
     return (
-        <div className={styles.galleryContainer}>
-            <div className={styles.result}>
-                {images.map((src, index) => (
-                    <div key={index} className={styles.imagecontainer} onClick={() => openDialog(src, index)}>
-                        <Image
-                            src={src}
-                            alt={`Image ${index + 1}`}
-                            layout="responsive"
-                            width={300}
-                            height={400}
-                            objectFit="cover"
-                        />
-                        {index < 3 && (
-                            <div className={styles.rankLabel}>
-                                <Image
-                                    src={getRankLabel(index)}
-                                    alt={`Rank ${index + 1}`}
-                                    width={40}
-                                    height={40}
-                                    layout="responsive"
-                                />
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
+        <><Header />
+            <div className={styles.galleryContainer}>
 
-            {selectedImage && (
-                <div className={styles.dialogOverlay} onClick={closeDialog}>
-                    <div className={styles.dialogContent} onClick={(e) => e.stopPropagation()}>
-                        <Image
-                            src={selectedImage.src}
-                            alt="Selected image"
-                            layout="responsive"
-                            width={600}
-                            height={800}
-                            objectFit="contain"
-                        />
-                        <p style={{ color: explanation[selectedImage.index] ? 'inherit' : 'gray' }}>{explanation[selectedImage.index] || '説明がありません'}</p>
-                        <button className={styles.closeButton} onClick={closeDialog}>閉じる</button>
-                    </div>
+                <div className={styles.result}>
+                    {images.map((src, index) => (
+                        <div key={index} className={styles.imagecontainer} onClick={() => openDialog(src, index)}>
+                            <Image
+                                src={src}
+                                alt={`Image ${index + 1}`}
+                                layout="responsive"
+                                width={300}
+                                height={400}
+                                objectFit="cover" />
+                            {index < 3 && (
+                                <div className={styles.rankLabel}>
+                                    <Image
+                                        src={getRankLabel(index)}
+                                        alt={`Rank ${index + 1}`}
+                                        width={40}
+                                        height={40}
+                                        layout="responsive" />
+                                </div>
+                            )}
+                        </div>
+                    ))}
                 </div>
-            )}
-        </div>
+
+                {selectedImage && (
+                    <div className={styles.dialogOverlay} onClick={closeDialog}>
+                        <div className={styles.dialogContent} onClick={(e) => e.stopPropagation()}>
+                            <Image
+                                src={selectedImage.src}
+                                alt="Selected image"
+                                layout="responsive"
+                                width={600}
+                                height={800}
+                                objectFit="contain" />
+                            <p style={{ color: explanation[selectedImage.index] ? 'inherit' : 'gray' }}>{explanation[selectedImage.index] || '説明がありません'}</p>
+                            <button className={styles.closeButton} onClick={closeDialog}>閉じる</button>
+                        </div>
+                    </div>
+                )}
+            </div></>
     );
 };
 
