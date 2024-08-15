@@ -115,8 +115,23 @@ async function SignUp() {
 	})
 }
 
+async function getRooms() {
+	// Get recent 100 rooms
+	let { data, err } = await client
+		.from(POSTS_TABLE)
+		.select("*")
+		//.eq("id", 0)
+		//.order("created_at", {ascending: false})
+		//.limit(100)
+	if (err) {
+		console.error(err);
+	}
+	console.log(data)
+	return data
+}
+
 await SignUp()
-await RegisterRoom("aaa", "Hello!")
+await getRooms()
 /////////////////////////
 
 // SAMPLE
