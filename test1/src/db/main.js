@@ -56,14 +56,11 @@ export async function Load(roomID) {
 
 export async function RegisterRoom(roomName, roomDescription, votingDeadline, submissionDeadline) {
 	// Get the client's User UID
-
-	const data = await client.auth.getUser()
-	console.log(data)
-	const { data1, err } = client.from(ROOMS_TABLE).insert({
+	const { error } = client.from(ROOMS_TABLE).insert({
 		"name": roomName,
 		"description": roomDescription,
-		"voting_deadline": votingDeadline,
-		"submission_deadline": submissionDeadline,
+		//"voting_deadline": votingDeadline,
+		//"submission_deadline": submissionDeadline,
 	})
 }
 
@@ -114,7 +111,7 @@ export async function GetTotal(post_id) {
 	return sum
 }
 
-async function GetPosts(room_id) {
+export async function GetPosts(room_id) {
 	const { data, err } = client.from(POSTS_TABLE).select("*").eq("room_id", room_id)
 	if (err) {
 		console.error(err)
@@ -129,7 +126,10 @@ async function SignUp() {
 	})
 }
 
+async function GetResults(post_id) {
 
+	
+}
 
 /////////////////////////
 

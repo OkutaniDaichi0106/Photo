@@ -1,7 +1,8 @@
 // pages/create.js
-import { RegisterRoom } from '@/db/main';
+import { API_KEY, PROJECT_URL, RegisterRoom } from '@/db/main';
 import Header from '../components/Header';
 import React, { useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
 
 const CreateRoom = () => {
     const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const CreateRoom = () => {
         description: '',
         location: ''
     });
+
+    const client = createClient(PROJECT_URL, API_KEY)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,9 +25,13 @@ const CreateRoom = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form Data:', formData);
         // ここにデータ送信処理を追加します
-        await RegisterRoom(formData.roomTitle, formData.description, formData.endVoteTime, formData.endPostTime)
+        client.from(ROOMS_TABLE).insert({
+            "name": formData.roomTitle,
+            "description": formData.description,
+            "voting_deadline": formData.endVoteTime,
+            "submission_deadline": formData.endPostTime,
+        })
     };
 
     return (
