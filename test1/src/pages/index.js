@@ -17,6 +17,10 @@ export default function Home() {
         router.push('/result');
     }
 
+    const navigateToPage4 = () => {
+        router.push('/timer');
+    }
+
 
     return (
         <div>
@@ -24,6 +28,7 @@ export default function Home() {
             <button onClick={navigateToPage1}>Page 1へ移動</button>
             <button onClick={navigateToPage2}>Page 2へ移動</button>
             <button onClick={navigateToPage3}>result</button>
+            <button onClick={navigateToPage4}>checktimer</button>
         </div>
     );
 }
