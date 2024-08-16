@@ -8,8 +8,10 @@ export const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmF
 export const ROOMS_TABLE = "rooms"
 export const POSTS_TABLE = "posts"
 export const STARS_TABLE = "stars"
+export const IMG_STORAGE = "photos"
 
 // Create client querys to the DB server
+const client = createClient(PROJECT_URL, API_KEY)
 
 // Sign in with Discord
 export async function SignInWithDiscord() {

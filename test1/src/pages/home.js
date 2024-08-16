@@ -20,10 +20,11 @@ export default function Home() {
 	    if (err) {
 		    console.error(err);
 	    }
-	    console.log(data)
+        
         if (data.length == 1) {
+            sessionStorage.setItem("roomData", JSON.stringify(data[0]))
             router.push('/post');
-        }  
+        }
     }
     //id入力後ボタン押したときの処理
     const handleTextChange = (event) => {

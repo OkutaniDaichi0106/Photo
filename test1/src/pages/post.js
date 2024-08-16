@@ -4,11 +4,15 @@ import Header from '../components/Header';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Dialog from '../components/Dialog';
+import { createClient } from '@supabase/supabase-js';
+import { API_KEY, IMG_STORAGE, POSTS_TABLE, PROJECT_URL } from '@/db/main';
 
 export default function Home() {
     const [text, setText] = useState('');
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    const [roomID, setRoomID] = useState(null)
+    const [userID, setUUID] = useState("")
     const router = useRouter();
 
     // 遷移したい時間を設定（例：2023年8月15日 15:00:00）
@@ -24,9 +28,33 @@ export default function Home() {
         setImagePreview(URL.createObjectURL(file));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // フォームのデータを処理する
+        const client = createClient(PROJECT_URL, API_KEY)
+        // Store the image to the supabase storage
+        const { data, error } = await client.storage.from(IMG_STORAGE).upload(`CraftStadium/${text}`, image)
+        if (error) {
+            console.error(error)
+        }
+        console.log(data)
+        const postID = data.id
+
+        const data1 = client.storage.from(IMG_STORAGE).getPublicUrl(data.fullPath)
+        if (data1) {
+            const data = client.from(POSTS_TABLE).insert({
+                "photo_url": data1.data.publicUrl,
+                "room_id": roomID,
+                "stars": 0,
+                "user_id": userID,
+            })
+            console.log(data)
+        } else {
+            console.error("failed to upload")
+        }
+
+
+       
         console.log('画像ファイル:', image);
         console.log('テキスト:', text);
 
@@ -37,7 +65,13 @@ export default function Home() {
     };
 
     useEffect(() => {
+        ////
 
+        const roomstr = sessionStorage.getItem("roomData")
+        const room = JSON.parse(roomstr)
+        setRoomID(room.id)
+        setUUID(room.user_id)
+        ////
         const timer = setInterval(() => {
             const now = new Date().getTime();
             const difference = targetTime - now;
