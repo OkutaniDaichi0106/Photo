@@ -1,5 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-import { cookies } from "next/headers";
 
 // Constant to identifies the DB server
 export const PROJECT_URL = "https://khbecgwvsbdguigjapru.supabase.co"
@@ -43,30 +42,9 @@ async function SignOut() {
 	}
 }
 
-export async function Post(image, text, roomID, userID) {
-	const { data, error } = await client.storage.from(IMG_STORAGE).upload(`CraftStadium/${text}`, image)
-	if (error) {
-		console.error(error)
-	}
-	console.log(data)
-	const postID = data.id
-
-	const data1 = client.storage.from(IMG_STORAGE).getPublicUrl(data.fullPath)
-	if (data1) {
-		const { error01 } = await client.from(POSTS_TABLE).insert({
-			"photo_url": data1.data.publicUrl,
-			"post_id": postID,
-			"room_id": roomID,
-			"stars": 0,
-			"user_id": userID,
-		})
-		if (error01) {
-			console.error(error)
-		}
-	} else {
-		console.error("failed to upload")
-	}	
-}
+// export async function Post(image, text, roomID, userID) {
+	
+// }
 
 export async function Load(roomID) {
 	const {data, error} = await client.from(POSTS_TABLE).select("*").eq("room_id", roomID)

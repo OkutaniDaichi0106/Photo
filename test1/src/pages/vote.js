@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { PROJECT_URL, API_KEY, Load } from "@/db/main";
 
-export default async function SwipeDemo() {
+export default function SwipeDemo() {
     // Create client querys to the DB server
     let client = createClient(PROJECT_URL, API_KEY);
 
@@ -22,29 +22,19 @@ export default async function SwipeDemo() {
     const currentXRef = useRef(0);
     const currentYRef = useRef(0);
 
-    const setEvaldict = useRef({}); // 評価値保存{photoIDs:value（評価値）}
+    const setEvaldict = useRef({}); // 評価値保存{photoid:value（評価値）}
 
-    const imageMap = new Map;
-    const roomID = sessionStorage.getItem("roomID")
-    let photoID
-    let photoURL
-    let photoIDs = []
-    let photoURLs = []
-    const data = await Load(roomID)
-    for (let i = 0; i < data.length; i++) {
-        photoID = data[i].id
-        photoIDs.push(photoID)
-        photoURL = data[i].photo_url
-        photoURLs.push(photoURL)
-        imageMap.set(photoID, photoURL)
-    }
+
+    const [images, setImages] = useState([])
+    const [photoIDs, setPhotoIDs] = useState([])
+
 
     const changePhoto = (newValue) => {
         setShowImage(false);
         setTimeout(() => {
-            if (currentImageIndex.current < photoURLs.length - 1) {
+            if (currentImageIndex.current < images.length - 1) {
                 currentImageIndex.current++;
-                console.log("currentImageIndex:" + currentImageIndex.current + "photoURLs.length:" + (photoURLs.length - 1));
+                console.log("currentImageIndex:" + currentImageIndex.current + "images.length:" + (images.length - 1));
                 setShowImage(true);
                 setHistory(prev => [...prev, newValue]);
             } else {
@@ -56,10 +46,22 @@ export default async function SwipeDemo() {
     }
 
 
-    
 
+    useEffect(() => {(async function(){
+        ////
+        const roomID = sessionStorage.getItem("roomID")
+        const data = await Load(roomID)
 
-    useEffect(() => {
+        for (let i=0; i < data.length; i++) {
+            images.push(data[i].photo_url)
+            setImages(images)
+            photoIDs.push(data[i].photo_url)
+            setPhotoIDs(photoIDs)
+            console.log(images, photoIDs)
+        }
+
+        ////
+
         const swipeArea = swipeAreaRef.current;
         if (swipeArea) {
             addEventListeners(swipeArea);
@@ -69,7 +71,7 @@ export default async function SwipeDemo() {
                 removeEventListeners(swipeArea);
             }
         };
-    }, []);
+    })()}, []);
 
     const addEventListeners = (element) => {
         element.addEventListener('touchstart', handleStart, false);
@@ -187,14 +189,14 @@ export default async function SwipeDemo() {
             setHistory(prev => prev.slice(0, -1));
             setIsFinished(false);
             setShowImage(true);
-            setEvaldict.current[photoIDs[currentImageIndex.current]] = 0;
+            setEvaldict.current[photoid[currentImageIndex.current]] = 0;
         } else {
             alert("まだ戻すことができません");
         }
     };
 
     const setEvaluation = (value) => {
-        setEvaldict.current[photoIDs[currentImageIndex.current]] = value;
+        setEvaldict.current[photoid[currentImageIndex.current]] = value;
         console.log(JSON.stringify(setEvaldict.current));
     }
 
@@ -225,7 +227,7 @@ export default async function SwipeDemo() {
                                     objectFit: 'contain',
                                     pointerEvents: 'none',
                                 }}
-                                src={photoURLs[currentImageIndex.current]}
+                                src={images[currentImageIndex.current]}
                                 alt={`Swipe image ${currentImageIndex.current + 1}`}
                             />
                         }

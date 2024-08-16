@@ -8,6 +8,8 @@ import { createClient } from '@supabase/supabase-js';
 import { API_KEY, IMG_STORAGE, Post, POSTS_TABLE, PROJECT_URL } from '@/db/main';
 
 export default function Home() {
+    const client = createClient(PROJECT_URL, API_KEY)
+
     const [text, setText] = useState('');
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
@@ -32,8 +34,27 @@ export default function Home() {
         e.preventDefault();
         // フォームのデータを処理する
         // Store the image to the supabase storage
-        await Post(image, text, roomID, userID)
+        const { data, error } = await client.storage.from(IMG_STORAGE).upload(`CraftStadium/${text}`, image)
+        if (error) {
+            console.error(error)
+        }
+        const data1 = client.storage.from(IMG_STORAGE).getPublicUrl(data.fullPath)
+        if (data1) {
+            const { error01 } = await client.from(POSTS_TABLE).insert({
+                "photo_url": data1.data.publicUrl,
+                "room_id": roomID,
+                "stars": 0,
+                "user_id": userID,
+            })
+            if (error01) {
+                console.error(error)
+            }
+        } else {
+            console.error("failed to upload")
+        }
         sessionStorage.setItem("roomID", roomID)
+        ///
+
         openDialog();
 
 
