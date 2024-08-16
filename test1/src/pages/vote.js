@@ -22,25 +22,29 @@ export default async function SwipeDemo() {
     const currentXRef = useRef(0);
     const currentYRef = useRef(0);
 
-    const setEvaldict = useRef({}); // 評価値保存{photoid:value（評価値）}
+    const setEvaldict = useRef({}); // 評価値保存{photoIDs:value（評価値）}
 
-    const images = new Map;
+    const imageMap = new Map;
     const roomID = sessionStorage.getItem("roomID")
     let photoID
     let photoURL
+    let photoIDs = []
+    let photoURLs = []
     const data = await Load(roomID)
     for (let i = 0; i < data.length; i++) {
         photoID = data[i].id
+        photoIDs.push(photoID)
         photoURL = data[i].photo_url
-        images.set(photoID, photoURL)
+        photoURLs.push(photoURL)
+        imageMap.set(photoID, photoURL)
     }
 
     const changePhoto = (newValue) => {
         setShowImage(false);
         setTimeout(() => {
-            if (currentImageIndex.current < images.length - 1) {
+            if (currentImageIndex.current < photoURLs.length - 1) {
                 currentImageIndex.current++;
-                console.log("currentImageIndex:" + currentImageIndex.current + "images.length:" + (images.length - 1));
+                console.log("currentImageIndex:" + currentImageIndex.current + "photoURLs.length:" + (photoURLs.length - 1));
                 setShowImage(true);
                 setHistory(prev => [...prev, newValue]);
             } else {
@@ -183,14 +187,14 @@ export default async function SwipeDemo() {
             setHistory(prev => prev.slice(0, -1));
             setIsFinished(false);
             setShowImage(true);
-            setEvaldict.current[photoid[currentImageIndex.current]] = 0;
+            setEvaldict.current[photoIDs[currentImageIndex.current]] = 0;
         } else {
             alert("まだ戻すことができません");
         }
     };
 
     const setEvaluation = (value) => {
-        setEvaldict.current[photoid[currentImageIndex.current]] = value;
+        setEvaldict.current[photoIDs[currentImageIndex.current]] = value;
         console.log(JSON.stringify(setEvaldict.current));
     }
 
@@ -221,7 +225,7 @@ export default async function SwipeDemo() {
                                     objectFit: 'contain',
                                     pointerEvents: 'none',
                                 }}
-                                src={images[currentImageIndex.current]}
+                                src={photoURLs[currentImageIndex.current]}
                                 alt={`Swipe image ${currentImageIndex.current + 1}`}
                             />
                         }
