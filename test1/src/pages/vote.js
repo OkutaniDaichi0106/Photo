@@ -1,6 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { TimedRedirectVote } from './timer';
+import Header from '../components/Header';
 
 export default function SwipeDemo() {
     // SupaBase
@@ -13,6 +15,7 @@ export default function SwipeDemo() {
     const STARS_TABLE = "stars";
     // Create client querys to the DB server
     let client = createClient(PROJECT_URL, API_KEY);
+
 
     const [currentX, setCurrentX] = useState(0);
     const [currentY, setCurrentY] = useState(0);
@@ -32,7 +35,7 @@ export default function SwipeDemo() {
     const setEvaldict = useRef({}); // 評価値保存{photoid:value（評価値）}
 
     const images = [ // 本来はDBから取得した写真
-        '/IMG_9986.jpg',
+        '/image2_2.jpg',
         '/IMG_7187.jpg',
         '/IMG_7203.jpg',
         '/IMG_9950.jpg',
@@ -203,10 +206,13 @@ export default function SwipeDemo() {
         console.log(JSON.stringify(setEvaldict.current));
     }
 
-    const printStar = (value) => { }
+    const printStar = (value) => {
+
+    }
+
 
     return (
-        <div id="swipe-container" style={swipeContainerStyle}>
+        <><Header /><div id="swipe-container" style={swipeContainerStyle}>
             {isFinished ? (
                 <div style={finishedStyle}>終了</div>
             ) : (
@@ -231,9 +237,7 @@ export default function SwipeDemo() {
                                     pointerEvents: 'none',
                                 }}
                                 src={images[currentImageIndex.current]}
-                                alt={`Swipe image ${currentImageIndex.current + 1}`}
-                            />
-                        }
+                                alt={`Swipe image ${currentImageIndex.current + 1}`} />}
                     </div>
                     <div style={buttonContainerStyle}>
                         <button style={backButtonStyle} onClick={handleUndo}></button>
@@ -243,7 +247,7 @@ export default function SwipeDemo() {
                     </div>
                 </>
             )}
-        </div>
+        </div></>
     );
 }
 
