@@ -52,4 +52,4 @@ export const TimedRedirectVote = () => {
 };
 
 
-export default TimedRedirectVote;
+// export default TimedRedirectVote;
