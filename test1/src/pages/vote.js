@@ -35,8 +35,9 @@ export default function SwipeDemo() {
 
     useEffect (() => {
         /** 評価を送信する */
-        if (Object.keys(setEvaldict).length === 0) {
-            for(let i = 0; i < photoIDs.current.length; i++) {
+        if (Object.keys(setEvaldict).length != 0) {
+            console.log("aaa")
+            for(let i = 0; i < photoIDs.length; i++) {
                 Evaluate(photoIDs[i], setEvaldict.current[photoIDs[i]])
             }
         }
