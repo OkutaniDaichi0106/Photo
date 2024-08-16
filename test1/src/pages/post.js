@@ -34,7 +34,10 @@ export default function Home() {
         e.preventDefault();
         // フォームのデータを処理する
         // Store the image to the supabase storage
-        const { data, error } = await client.storage.from(IMG_STORAGE).upload(`CraftStadium/${text}`, image)
+        const encoder = new TextEncoder()
+        const textArray = encoder.encode(text)
+        const code = textArray.join("");
+        const { data, error } = await client.storage.from(IMG_STORAGE).upload(`CraftStadium/${code}`, image)
         if (error) {
             console.error(error)
         }
@@ -138,7 +141,7 @@ export default function Home() {
                     )}
                     <label htmlFor="text"
 
-                    >説明:</label>
+                    >タイトル:</label>
 
                     <input
                         type='text'
