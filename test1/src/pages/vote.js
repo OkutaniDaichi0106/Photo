@@ -1,10 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { PROJECT_URL, API_KEY, Load } from "@/db/main";
-import { TimedRedirectVote } from './timer';
-import Header from '../components/Header';
-
+import { PROJECT_URL, API_KEY, Load, Evaluate } from "@/db/main";
+// import {TimedRedirectVote} from './timer';
+import { parseSetCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 export default function SwipeDemo() {
     // Create client querys to the DB server
@@ -25,6 +24,9 @@ export default function SwipeDemo() {
     const isDraggingRef = useRef(false);
     const currentXRef = useRef(0);
     const currentYRef = useRef(0);
+    const flag = useRef(false);
+    const [imagevalue, setImageValue] = useState('');
+    const didEffect = useRef(false);
 
     const setEvaldict = useRef({}); // 評価値保存{photoid:value（評価値）}
 
@@ -32,16 +34,26 @@ export default function SwipeDemo() {
     const [images, setImages] = useState([])
     const [photoIDs, setPhotoIDs] = useState([])
 
+    useEffect (() => {
+        /** 評価を送信する */
+        if (Object.keys(setEvaldict).length != 0) {
+            console.log("aaa")
+            for(let i = 0; i < photoIDs.length; i++) {
+                Evaluate(photoIDs[i], setEvaldict.current[photoIDs[i]])
+            }
+        }
+    }, [isFinished])
 
 
-    const changePhoto = (newValue) => {
+    const changePhoto = (newValue, flag) => {
         setShowImage(false);
         setTimeout(() => {
-            if (currentImageIndex.current < images.length - 1) {
-                currentImageIndex.current++;
-                console.log("currentImageIndex:" + currentImageIndex.current + "images.length:" + (images.length - 1));
+            if (currentImageIndex.current < images.length  && flag) {
                 setShowImage(true);
                 setHistory(prev => [...prev, newValue]);
+                setImageValue(images[currentImageIndex.current]);
+                currentImageIndex.current++;
+                console.log("currentImageIndex:" + currentImageIndex.current + "images.length:" + (images.length - 1));
             } else {
                 console.log("changephoto");
                 currentImageIndex.current++;
@@ -52,33 +64,37 @@ export default function SwipeDemo() {
 
 
 
-    useEffect(() => {
-        (async function () {
-            ////
-            const roomID = sessionStorage.getItem("roomID")
-            const data = await Load(roomID)
 
-            for (let i = 0; i < data.length; i++) {
-                images.push(data[i].photo_url)
-                setImages(images)
-                photoIDs.push(data[i].photo_url)
-                setPhotoIDs(photoIDs)
-                console.log(images, photoIDs)
-            }
+    useEffect(() => {(async function(){
+        if (!didEffect.current) {
+            didEffect.current = true;
+        ////
+        const roomID = sessionStorage.getItem("roomID")
+        const data = await Load(roomID)
 
-            ////
+        for (let i=0; i < data.length; i++) {
+            images.push(data[i].photo_url)
+            setImages(images)
+            photoIDs.push(data[i].id)
+            setPhotoIDs(photoIDs)
+            console.log(images, photoIDs)
+        }
+        flag.current = true;
+        changePhoto(0, flag.current);
+    }
 
-            const swipeArea = swipeAreaRef.current;
+        ////
+
+        const swipeArea = swipeAreaRef.current;
+        if (swipeArea) {
+            addEventListeners(swipeArea);
+        }
+        return () => {
             if (swipeArea) {
-                addEventListeners(swipeArea);
+                removeEventListeners(swipeArea);
             }
-            return () => {
-                if (swipeArea) {
-                    removeEventListeners(swipeArea);
-                }
-            };
-        })()
-    }, []);
+        };
+    })()}, []);
 
     const addEventListeners = (element) => {
         element.addEventListener('touchstart', handleStart, false);
@@ -162,7 +178,7 @@ export default function SwipeDemo() {
 
             console.log(isFinished);
             if (!isFinished) {
-                changePhoto(newValue);
+                changePhoto(newValue, flag.current);
             }
             setIsSwipeComplete(true);
         } else {
@@ -186,7 +202,7 @@ export default function SwipeDemo() {
     const handleButtonClick = (buttonValue) => {
         if (!isFinished) {
             setEvaluation(buttonValue);
-            changePhoto(buttonValue);
+            changePhoto(buttonValue, flag.current);
         }
     };
 
@@ -203,17 +219,14 @@ export default function SwipeDemo() {
     };
 
     const setEvaluation = (value) => {
-        setEvaldict.current[photoIDs[currentImageIndex.current]] = value;
+        setEvaldict.current[photoIDs[currentImageIndex.current - 1]] = value;
         console.log(JSON.stringify(setEvaldict.current));
     }
 
-    const printStar = (value) => {
-
-    }
-
+    const printStar = (value) => { }
 
     return (
-        <><Header /><div id="swipe-container" style={swipeContainerStyle}>
+        <div id="swipe-container" style={swipeContainerStyle}>
             {isFinished ? (
                 <div style={finishedStyle}>終了</div>
             ) : (
@@ -237,8 +250,10 @@ export default function SwipeDemo() {
                                     objectFit: 'contain',
                                     pointerEvents: 'none',
                                 }}
-                                src={images[currentImageIndex.current]}
-                                alt={`Swipe image ${currentImageIndex.current + 1}`} />}
+                                src={imagevalue}
+                                alt={`Swipe image ${currentImageIndex.current + 1}`}
+                            />
+                        }
                     </div>
                     <div style={buttonContainerStyle}>
                         <button style={backButtonStyle} onClick={handleUndo}></button>
@@ -248,7 +263,7 @@ export default function SwipeDemo() {
                     </div>
                 </>
             )}
-        </div></>
+        </div>
     );
 }
 
