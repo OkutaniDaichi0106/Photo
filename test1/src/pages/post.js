@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Dialog from '../components/Dialog';
 import { createClient } from '@supabase/supabase-js';
-import { API_KEY, IMG_STORAGE, POSTS_TABLE, PROJECT_URL } from '@/db/main';
+import { API_KEY, IMG_STORAGE, Post, POSTS_TABLE, PROJECT_URL } from '@/db/main';
 
 export default function Home() {
     const [text, setText] = useState('');
@@ -31,33 +31,9 @@ export default function Home() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         // フォームのデータを処理する
-        const client = createClient(PROJECT_URL, API_KEY)
         // Store the image to the supabase storage
-        const { data, error } = await client.storage.from(IMG_STORAGE).upload(`CraftStadium/${text}`, image)
-        if (error) {
-            console.error(error)
-        }
-        console.log(data)
-        const postID = data.id
-
-        const data1 = client.storage.from(IMG_STORAGE).getPublicUrl(data.fullPath)
-        if (data1) {
-            const data = client.from(POSTS_TABLE).insert({
-                "photo_url": data1.data.publicUrl,
-                "room_id": roomID,
-                "stars": 0,
-                "user_id": userID,
-            })
-            console.log(data)
-        } else {
-            console.error("failed to upload")
-        }
-
-
-       
-        console.log('画像ファイル:', image);
-        console.log('テキスト:', text);
-
+        await Post(image, text, roomID, userID)
+        sessionStorage.setItem("roomID", roomID)
         openDialog();
 
 

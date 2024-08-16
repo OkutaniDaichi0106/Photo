@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { cookies } from "next/headers";
 
 // Constant to identifies the DB server
 export const PROJECT_URL = "https://khbecgwvsbdguigjapru.supabase.co"
@@ -42,13 +43,45 @@ async function SignOut() {
 	}
 }
 
+export async function Post(image, text, roomID, userID) {
+	const { data, error } = await client.storage.from(IMG_STORAGE).upload(`CraftStadium/${text}`, image)
+	if (error) {
+		console.error(error)
+	}
+	console.log(data)
+	const postID = data.id
+
+	const data1 = client.storage.from(IMG_STORAGE).getPublicUrl(data.fullPath)
+	if (data1) {
+		const { error01 } = await client.from(POSTS_TABLE).insert({
+			"photo_url": data1.data.publicUrl,
+			"post_id": postID,
+			"room_id": roomID,
+			"stars": 0,
+			"user_id": userID,
+		})
+		if (error01) {
+			console.error(error)
+		}
+	} else {
+		console.error("failed to upload")
+	}	
+}
+
+export async function Load(roomID) {
+	const {data, error} = await client.from(POSTS_TABLE).select("*").eq("room_id", roomID)
+	if (error) {
+		console.error(error)
+	}
+	return data
+}
 
 async function RegisterRoom(roomName, roomDescription) {
 	// Get the client's User UID
 
 	const data = await client.auth.getUser()
 	console.log(data)
-	const {data1, err} = client.from(ROOMS_TABLE).insert({
+	const { data1, err } = client.from(ROOMS_TABLE).insert({
 
 	})
 }
@@ -101,7 +134,7 @@ async function GetTotal(post_id) {
 }
 
 async function GetPosts(room_id) {
-	const { data, err} = client.from(POSTS_TABLE).select("*").eq("room_id", room_id)
+	const { data, err } = client.from(POSTS_TABLE).select("*").eq("room_id", room_id)
 	if (err) {
 		console.error(err)
 	}
@@ -110,8 +143,8 @@ async function GetPosts(room_id) {
 
 async function SignUp() {
 	const { data, err } = await client.auth.signUp({
-		email:"daichi1616.kytuniv@gmail.com",
-		password:"rikugame3",
+		email: "daichi1616.kytuniv@gmail.com",
+		password: "rikugame3",
 	})
 }
 
