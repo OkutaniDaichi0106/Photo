@@ -2,10 +2,14 @@ import { createClient } from "@supabase/supabase-js";
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { PROJECT_URL, API_KEY, Load } from "@/db/main";
+import { TimedRedirectVote } from './timer';
+import Header from '../components/Header';
+
 
 export default function SwipeDemo() {
     // Create client querys to the DB server
     let client = createClient(PROJECT_URL, API_KEY);
+
 
     const [currentX, setCurrentX] = useState(0);
     const [currentY, setCurrentY] = useState(0);
@@ -29,6 +33,7 @@ export default function SwipeDemo() {
     const [photoIDs, setPhotoIDs] = useState([])
 
 
+
     const changePhoto = (newValue) => {
         setShowImage(false);
         setTimeout(() => {
@@ -47,31 +52,33 @@ export default function SwipeDemo() {
 
 
 
-    useEffect(() => {(async function(){
-        ////
-        const roomID = sessionStorage.getItem("roomID")
-        const data = await Load(roomID)
+    useEffect(() => {
+        (async function () {
+            ////
+            const roomID = sessionStorage.getItem("roomID")
+            const data = await Load(roomID)
 
-        for (let i=0; i < data.length; i++) {
-            images.push(data[i].photo_url)
-            setImages(images)
-            photoIDs.push(data[i].photo_url)
-            setPhotoIDs(photoIDs)
-            console.log(images, photoIDs)
-        }
-
-        ////
-
-        const swipeArea = swipeAreaRef.current;
-        if (swipeArea) {
-            addEventListeners(swipeArea);
-        }
-        return () => {
-            if (swipeArea) {
-                removeEventListeners(swipeArea);
+            for (let i = 0; i < data.length; i++) {
+                images.push(data[i].photo_url)
+                setImages(images)
+                photoIDs.push(data[i].photo_url)
+                setPhotoIDs(photoIDs)
+                console.log(images, photoIDs)
             }
-        };
-    })()}, []);
+
+            ////
+
+            const swipeArea = swipeAreaRef.current;
+            if (swipeArea) {
+                addEventListeners(swipeArea);
+            }
+            return () => {
+                if (swipeArea) {
+                    removeEventListeners(swipeArea);
+                }
+            };
+        })()
+    }, []);
 
     const addEventListeners = (element) => {
         element.addEventListener('touchstart', handleStart, false);
@@ -200,10 +207,13 @@ export default function SwipeDemo() {
         console.log(JSON.stringify(setEvaldict.current));
     }
 
-    const printStar = (value) => { }
+    const printStar = (value) => {
+
+    }
+
 
     return (
-        <div id="swipe-container" style={swipeContainerStyle}>
+        <><Header /><div id="swipe-container" style={swipeContainerStyle}>
             {isFinished ? (
                 <div style={finishedStyle}>終了</div>
             ) : (
@@ -228,9 +238,7 @@ export default function SwipeDemo() {
                                     pointerEvents: 'none',
                                 }}
                                 src={images[currentImageIndex.current]}
-                                alt={`Swipe image ${currentImageIndex.current + 1}`}
-                            />
-                        }
+                                alt={`Swipe image ${currentImageIndex.current + 1}`} />}
                     </div>
                     <div style={buttonContainerStyle}>
                         <button style={backButtonStyle} onClick={handleUndo}></button>
@@ -240,7 +248,7 @@ export default function SwipeDemo() {
                     </div>
                 </>
             )}
-        </div>
+        </div></>
     );
 }
 
