@@ -69,16 +69,26 @@ export default function Home() {
         setRoomID(room.id)
         setUUID(room.user_id)
         ////
-        const timer = setInterval(() => {
+        const timer = setInterval(() => (async function() {
             const now = new Date().getTime();
             const difference = targetTime - now;
 
             if (difference <= 0) {
                 clearInterval(timer);
                 // 指定時間になったら '/next-page' に遷移
-                router.push('/vote');
+                const access_token = params.get('access_token');
+                const refresh_token = params.get('refresh_token');
+                console.log("access_token:" + access_token + ",refresh_token:" + refresh_token);
+                if (access_token && refresh_token) {
+                    const { data, error } = await client.auth.getSession()
+                    if (data.session) {
+                        sessionStorage.setItem("discord_session", JSON.stringify(data.session))
+                    }
+                    // オプション: URLからハッシュを削除
+                    router.push('/vote');
+                }
             }
-        }, 1000); // 1秒ごとにチェック
+        })(), 1000); // 1秒ごとにチェック
 
         return () => clearInterval(timer);
     }, [router]);
