@@ -47,31 +47,33 @@ export default function SwipeDemo() {
 
 
 
-    useEffect(() => {(async function(){
-        ////
-        const roomID = sessionStorage.getItem("roomID")
-        const data = await Load(roomID)
+    useEffect(() => {
+        (async function () {
+            ////
+            const roomID = sessionStorage.getItem("roomID")
+            const data = await Load(roomID)
 
-        for (let i=0; i < data.length; i++) {
-            images.push(data[i].photo_url)
-            setImages(images)
-            photoIDs.push(data[i].photo_url)
-            setPhotoIDs(photoIDs)
-            console.log(images, photoIDs)
-        }
-
-        ////
-
-        const swipeArea = swipeAreaRef.current;
-        if (swipeArea) {
-            addEventListeners(swipeArea);
-        }
-        return () => {
-            if (swipeArea) {
-                removeEventListeners(swipeArea);
+            for (let i = 0; i < data.length; i++) {
+                images.push(data[i].photo_url)
+                setImages(images)
+                photoIDs.push(data[i].photo_url)
+                setPhotoIDs(photoIDs)
+                console.log(images, photoIDs)
             }
-        };
-    })()}, []);
+
+            ////
+
+            const swipeArea = swipeAreaRef.current;
+            if (swipeArea) {
+                addEventListeners(swipeArea);
+            }
+            return () => {
+                if (swipeArea) {
+                    removeEventListeners(swipeArea);
+                }
+            };
+        })()
+    }, []);
 
     const addEventListeners = (element) => {
         element.addEventListener('touchstart', handleStart, false);
