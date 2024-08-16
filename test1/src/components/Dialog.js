@@ -18,7 +18,7 @@ const Dialog = ({ isOpen, onClose }) => {
             <div style={styles.dialog}>
                 <p>投稿が完了しました。</p>
                 <button onClick={handleOk}>OK</button>
-                <button onClick={onClose}>Cancel</button>
+                {/* <button onClick={onClose}>Cancel</button> */}
             </div>
         </div>
     );
