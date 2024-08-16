@@ -1,22 +1,38 @@
 import { createClient } from "@supabase/supabase-js";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from '../styles/result.module.css';
 import Header from '../components/Header';
+import { PROJECT_URL, API_KEY, POSTS_TABLE } from "@/db/main";
 
 /* SupaBase */
-// Constant to identifies the DB server
-const PROJECT_URL = "https://khbecgwvsbdguigjapru.supabase.co";
-const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoYmVjZ3d2c2JkZ3VpZ2phcHJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1MjY4MzYsImV4cCI6MjAzOTEwMjgzNn0.X8PCdQimHNp0hZoGVorEC1-W5HiYxXK2QtvWi99Jycw";
-// All tables
-const ROOMS_TABLE = "rooms";
-const POSTS_TABLE = "posts";
-const STARS_TABLE = "stars";
 // Create client querys to the DB server
 let client = createClient(PROJECT_URL, API_KEY);
 
 const ImageGallery = () => {
+    /////
+    useEffect(() => {
+        (async function() {
+            // Get all images of the same room ID
+            const { data, error } = await client.from(POSTS_TABLE).select("*").eq("room_id", sessionStorage.getItem("roomID"))
+            if (error) {
+                console.error(error)
+            }
+
+            ///TODO: 画像の配列を反映して表示する
+            //// MAKE IMAGE ARRAY////
+            for (let i = 0; i< data.length; i++) {
+                images.push(data[i])
+            }
+
+        })()
+    }
+
+    )
+
+    /////
     const [selectedImage, setSelectedImage] = useState(null);
+    
     const images = [
         '/images/image1.jpg',
         '/images/image2.jpg',

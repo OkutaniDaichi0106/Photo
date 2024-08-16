@@ -1,18 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { PROJECT_URL, API_KEY, Load } from "@/db/main";
 import { TimedRedirectVote } from './timer';
 import Header from '../components/Header';
 
+
 export default function SwipeDemo() {
-    // SupaBase
-    // Constant to identifies the DB server
-    const PROJECT_URL = "https://khbecgwvsbdguigjapru.supabase.co";
-    const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoYmVjZ3d2c2JkZ3VpZ2phcHJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1MjY4MzYsImV4cCI6MjAzOTEwMjgzNn0.X8PCdQimHNp0hZoGVorEC1-W5HiYxXK2QtvWi99Jycw";
-    // All tables
-    const ROOMS_TABLE = "rooms";
-    const POSTS_TABLE = "posts";
-    const STARS_TABLE = "stars";
     // Create client querys to the DB server
     let client = createClient(PROJECT_URL, API_KEY);
 
@@ -34,20 +28,10 @@ export default function SwipeDemo() {
 
     const setEvaldict = useRef({}); // 評価値保存{photoid:value（評価値）}
 
-    const images = [ // 本来はDBから取得した写真
-        '/image2_2.jpg',
-        '/IMG_7187.jpg',
-        '/IMG_7203.jpg',
-        '/IMG_9950.jpg',
-        '/IMG_9964.jpg',
-        '/030_2048.jpg',
-        '/IMGP3543.jpg',
-        // 必要な数だけ画像パスを追加
-    ];
-    const photoid = []; // 本来はDBから取得した値たち
-    for (let i = 0; i < images.length; i++) {
-        photoid.push(i);
-    }
+
+    const [images, setImages] = useState([])
+    const [photoIDs, setPhotoIDs] = useState([])
+
 
 
     const changePhoto = (newValue) => {
@@ -67,16 +51,33 @@ export default function SwipeDemo() {
     }
 
 
+
     useEffect(() => {
-        const swipeArea = swipeAreaRef.current;
-        if (swipeArea) {
-            addEventListeners(swipeArea);
-        }
-        return () => {
-            if (swipeArea) {
-                removeEventListeners(swipeArea);
+        (async function () {
+            ////
+            const roomID = sessionStorage.getItem("roomID")
+            const data = await Load(roomID)
+
+            for (let i = 0; i < data.length; i++) {
+                images.push(data[i].photo_url)
+                setImages(images)
+                photoIDs.push(data[i].photo_url)
+                setPhotoIDs(photoIDs)
+                console.log(images, photoIDs)
             }
-        };
+
+            ////
+
+            const swipeArea = swipeAreaRef.current;
+            if (swipeArea) {
+                addEventListeners(swipeArea);
+            }
+            return () => {
+                if (swipeArea) {
+                    removeEventListeners(swipeArea);
+                }
+            };
+        })()
     }, []);
 
     const addEventListeners = (element) => {

@@ -4,11 +4,17 @@ import Header from '../components/Header';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Dialog from '../components/Dialog';
+import { createClient } from '@supabase/supabase-js';
+import { API_KEY, IMG_STORAGE, Post, POSTS_TABLE, PROJECT_URL } from '@/db/main';
 
 export default function Home() {
+    const client = createClient(PROJECT_URL, API_KEY)
+
     const [text, setText] = useState('');
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    const [roomID, setRoomID] = useState(null)
+    const [userID, setUUID] = useState("")
     const router = useRouter();
 
     // 遷移したい時間を設定（例：2023年8月15日 15:00:00）
@@ -24,11 +30,30 @@ export default function Home() {
         setImagePreview(URL.createObjectURL(file));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // フォームのデータを処理する
-        console.log('画像ファイル:', image);
-        console.log('テキスト:', text);
+        // Store the image to the supabase storage
+        const { data, error } = await client.storage.from(IMG_STORAGE).upload(`CraftStadium/${text}`, image)
+        if (error) {
+            console.error(error)
+        }
+        const data1 = client.storage.from(IMG_STORAGE).getPublicUrl(data.fullPath)
+        if (data1) {
+            const { error01 } = await client.from(POSTS_TABLE).insert({
+                "photo_url": data1.data.publicUrl,
+                "room_id": roomID,
+                "stars": 0,
+                "user_id": userID,
+            })
+            if (error01) {
+                console.error(error)
+            }
+        } else {
+            console.error("failed to upload")
+        }
+        sessionStorage.setItem("roomID", roomID)
+        ///
 
         openDialog();
 
@@ -37,17 +62,33 @@ export default function Home() {
     };
 
     useEffect(() => {
+        ////
 
-        const timer = setInterval(() => {
+        const roomstr = sessionStorage.getItem("roomData")
+        const room = JSON.parse(roomstr)
+        setRoomID(room.id)
+        setUUID(room.user_id)
+        ////
+        const timer = setInterval(() => (async function() {
             const now = new Date().getTime();
             const difference = targetTime - now;
 
             if (difference <= 0) {
                 clearInterval(timer);
                 // 指定時間になったら '/next-page' に遷移
-                router.push('/vote');
+                const access_token = params.get('access_token');
+                const refresh_token = params.get('refresh_token');
+                console.log("access_token:" + access_token + ",refresh_token:" + refresh_token);
+                if (access_token && refresh_token) {
+                    const { data, error } = await client.auth.getSession()
+                    if (data.session) {
+                        sessionStorage.setItem("discord_session", JSON.stringify(data.session))
+                    }
+                    // オプション: URLからハッシュを削除
+                    router.push('/vote');
+                }
             }
-        }, 1000); // 1秒ごとにチェック
+        })(), 1000); // 1秒ごとにチェック
 
         return () => clearInterval(timer);
     }, [router]);
