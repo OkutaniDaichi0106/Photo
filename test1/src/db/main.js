@@ -103,7 +103,7 @@ export async function Evaluate(post_id, star) {
 
 // 
 export async function GetTotal(post_id) {
-	const { stars, err } = await client.from(STARS_TABLE).select("star").eq("post_id", post_id)
+	const { stars, err } = await client.from(STARS_TABLE).select("star").eq("id", post_id)
 	if (err) {
 		console.error(err)
 	}
