@@ -54,13 +54,16 @@ export async function Load(roomID) {
 	return data
 }
 
-async function RegisterRoom(roomName, roomDescription) {
+export async function RegisterRoom(roomName, roomDescription, votingDeadline, submissionDeadline) {
 	// Get the client's User UID
 
 	const data = await client.auth.getUser()
 	console.log(data)
 	const { data1, err } = client.from(ROOMS_TABLE).insert({
-
+		"name": roomName,
+		"description": roomDescription,
+		"voting_deadline": votingDeadline,
+		"submission_deadline": submissionDeadline,
 	})
 }
 
@@ -77,7 +80,7 @@ async function setSession(access_token, refresh_token) {
 	return data
 }
 
-async function Evaluate(post_id, star) {
+export async function Evaluate(post_id, star) {
 	// Check if the number of the stars is valid
 	if (star < 0 || star > 3) {
 		console.error("invalid star")
@@ -85,21 +88,21 @@ async function Evaluate(post_id, star) {
 	}
 
 	// Register the data
-	const { data, err } = await client
+	const { error } = await client
 		.from(STARS_TABLE)
 		.insert({
 			"post_id": post_id,
 			"star": star,
-		}).select()
+		})
 
-	if (err) {
-		console.error(err)
+	if (error) {
+		console.error(error)
 	}
-	console.log(data)
+
 }
 
 // 
-async function GetTotal(post_id) {
+export async function GetTotal(post_id) {
 	const { stars, err } = await client.from(STARS_TABLE).select("star").eq("post_id", post_id)
 	if (err) {
 		console.error(err)

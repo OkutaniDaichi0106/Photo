@@ -1,4 +1,5 @@
 // pages/create.js
+import { RegisterRoom } from '@/db/main';
 import Header from '../components/Header';
 import React, { useState } from 'react';
 
@@ -19,10 +20,11 @@ const CreateRoom = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Form Data:', formData);
         // ここにデータ送信処理を追加します
+        await RegisterRoom(formData.roomTitle, formData.description, formData.endVoteTime, formData.endPostTime)
     };
 
     return (

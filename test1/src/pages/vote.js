@@ -189,14 +189,14 @@ export default function SwipeDemo() {
             setHistory(prev => prev.slice(0, -1));
             setIsFinished(false);
             setShowImage(true);
-            setEvaldict.current[photoid[currentImageIndex.current]] = 0;
+            setEvaldict.current[photoIDs[currentImageIndex.current]] = 0;
         } else {
             alert("まだ戻すことができません");
         }
     };
 
     const setEvaluation = (value) => {
-        setEvaldict.current[photoid[currentImageIndex.current]] = value;
+        setEvaldict.current[photoIDs[currentImageIndex.current]] = value;
         console.log(JSON.stringify(setEvaldict.current));
     }
 

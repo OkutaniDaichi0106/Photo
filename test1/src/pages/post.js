@@ -38,7 +38,7 @@ export default function Home() {
         if (error) {
             console.error(error)
         }
-        const data1 = client.storage.from(IMG_STORAGE).getPublicUrl(data.fullPath)
+        const data1 = client.storage.from(IMG_STORAGE).getPublicUrl(data.path)
         if (data1) {
             const { error01 } = await client.from(POSTS_TABLE).insert({
                 "photo_url": data1.data.publicUrl,
