@@ -140,7 +140,8 @@ export default function Home() {
 
                     >説明:</label>
 
-                    <textarea
+                    <input
+                        type='text'
                         id="text"
                         value={text}
                         onChange={handleTextChange}

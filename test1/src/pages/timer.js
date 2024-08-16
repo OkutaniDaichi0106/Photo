@@ -17,7 +17,7 @@ export const TimedRedirectResult = () => {
             // 指定時間になったら '/next-page' に遷移
             router.push('/result');
         }
-    }
+    
 
         }, 1000); // 1秒ごとにチェック
 
