@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
 
 h1 {
-  font-family: 'Sacramento', cursive;
+  /* font-family: 'Sacramento', cursive; */
   text-align: center;
 }
 
@@ -97,7 +97,7 @@ button:hover {
 
 /* フッター */
 footer {
-  background-color: #a8d5ba;
+  background-color: #f5faf7;
   /* 少し濃い目の緑色 */
   color: #ffffff;
   text-align: center;
