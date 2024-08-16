@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import {TimedRedirectVote} from './timer';
 
 export default function SwipeDemo() {
   // SupaBase
@@ -13,6 +14,7 @@ export default function SwipeDemo() {
   const STARS_TABLE = "stars";
   // Create client querys to the DB server
   let client = createClient(PROJECT_URL, API_KEY);
+
 
   const [currentX, setCurrentX] = useState(0);
   const [currentY, setCurrentY] = useState(0);
@@ -203,7 +205,10 @@ export default function SwipeDemo() {
     console.log(JSON.stringify(setEvaldict.current));
   }
 
-  const printStar = (value) => { }
+  const printStar = (value) => {
+
+  }
+
 
   return (
     <div id="swipe-container" style={swipeContainerStyle}>
