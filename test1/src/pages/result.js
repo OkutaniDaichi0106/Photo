@@ -18,8 +18,9 @@ const ImageGallery = () => {
             if (error) {
                 console.error(error)
             }
-            
-            ///MAKE IMAGE ARRAY////
+
+            ///TODO: 画像の配列を反映して表示する
+            //// MAKE IMAGE ARRAY////
             for (let i = 0; i< data.length; i++) {
                 images.push(data[i])
             }
